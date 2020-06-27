@@ -1,4 +1,4 @@
-package collection
+package collectionTest
 
 /**
   * @author sober 2020-06-10-12:01
