@@ -1,7 +1,0 @@
-hello world
-hello scala
-hello spark
-hi hadoop
-hi kafka
-hello spark
-hi spark

@@ -30,7 +30,6 @@ object implicitClassTest {
 
 }
 
-//应以要给普通类
 class M{
   def sayOK(): Unit ={
     println("OK")
