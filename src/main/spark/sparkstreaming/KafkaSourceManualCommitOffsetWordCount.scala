@@ -38,9 +38,8 @@ object KafkaSourceManualCommitOffsetWordCount {
     )
 
     /**
-     * 要想拿到kafka的offset，有两种方式
+     * 从kafka拿偏移量，读数据并执行一系列计算，向kafka提交偏移量。(Kafka的偏移量信息记录在Kafka的一个特殊topic即__consumer_offsets中)
      *
-     * 方式1如下
      */
     //foreachRDD会依次遍历DStream中的每个RDD。DStream会定期的生成RDD，在上面new StreamingContext中指定了batchDuration为5秒，所以DStream会每隔5秒生成一个RDD
     //注意foreachRDD是在Driver端执行的，所以foreachRDD既不是transform算子也不是action算子
@@ -58,7 +57,7 @@ object KafkaSourceManualCommitOffsetWordCount {
         //进行WordCount
         rdd.map(_.value()).flatMap(_.split(" ")).map((_, 1)).reduceByKey(_ + _).foreach(println)
 
-        //Driver端异步更新偏移量(偏移量信息记录进)。注意上面的WordCount是在Executor端执行的。下面的更新偏移量是在Driver端执行的，所以这两个是异步的，有可能对rdd进行WordCount还没有计算完，但偏移量已经更新了
+        //Driver端异步更新偏移量(偏移量信息记录进Kafka的特殊topic即__consumer_offsets中)。注意上面的WordCount是在Executor端执行的。下面的更新偏移量是在Driver端执行的，所以这两个是异步的，有可能对rdd进行WordCount还没有计算完，但偏移量已经更新了
         kafkaDStream.asInstanceOf[CanCommitOffsets].commitAsync(offsetRanges)
       }
       //注意偏移量的获取和提交都是在Driver端
