@@ -1,12 +1,12 @@
-package sparkstreaming.KeepExactlyOnce
+package sparkstreaming.KeepExactlyOnce.AggregateComputeTask
 
 import java.sql.{Connection, PreparedStatement}
 
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.SparkConf
+import org.apache.spark.streaming.kafka010._
 import org.apache.spark.streaming.{Seconds, StreamingContext}
-import org.apache.spark.streaming.kafka010.{ConsumerStrategies, HasOffsetRanges, KafkaUtils, LocationStrategies, OffsetRange}
 
 /**
  * @author huangJunJie 2021-05-09-12:07
@@ -21,9 +21,6 @@ object KafkaWordCountStoreResultAndOffsetInMysql {
 
 
     val groupId = "group_three"
-    //在创建kafkaParams之前，在Driver端查询历史偏移量
-    //从Mysql中读取Kafka的历史偏移量
-    val offset : Map[TopicPartition,Long] = KafkaOffsetUtils.queryHistoryOffsetFromMysql(groupId)
     val kafkaParams = Map[String, Object](
       "bootstrap.servers" -> "192.168.204.101:9092,192.168.204.102:9092,192.168.204.103:9092",
       "key.deserializer" -> classOf[StringDeserializer],
@@ -34,10 +31,13 @@ object KafkaWordCountStoreResultAndOffsetInMysql {
     )
     val topics = Array("topicA")
 
+    //在创建kafkaDStream之前，在Driver端查询历史偏移量
+    //从Mysql中读取Kafka的历史偏移量
+    val historyOffsets : Map[TopicPartition,Long] = KafkaOffsetUtils.queryHistoryOffsetFromMysql(groupId)
     val kafkaDStream = KafkaUtils.createDirectStream(
       ssc,
       LocationStrategies.PreferConsistent,
-      ConsumerStrategies.Subscribe[String, String](topics, kafkaParams,offset)
+      ConsumerStrategies.Subscribe[String, String](topics, kafkaParams,historyOffsets)
     )
 
     kafkaDStream.foreachRDD(rdd => {

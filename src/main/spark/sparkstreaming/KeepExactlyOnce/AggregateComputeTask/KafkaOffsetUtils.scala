@@ -1,4 +1,4 @@
-package sparkstreaming.KeepExactlyOnce
+package sparkstreaming.KeepExactlyOnce.AggregateComputeTask
 
 import java.sql.{Connection, PreparedStatement, ResultSet}
 
