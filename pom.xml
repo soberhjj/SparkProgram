@@ -68,6 +68,15 @@
             </exclusions>
         </dependency>
 
+        <!--引入protobuf-java 2.5.0的原因是HBase1.2.x版本强依赖于protobuf-java 2.5.0
+        如果不引入，那么HBase会报错：java.lang.NoClassDefFoundError: Could not initialize class org.apache.hadoop.hbase.util.ByteStringer
+        参考文章：https://blog.csdn.net/weixin_34315189/article/details/92170235-->
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
