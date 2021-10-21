@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <!-- ########################### hive的 JDBC连接 ############################ -->
+    <!-- mysql 连接用户名 -->
+    <property>
+        <name>javax.jdo.option.ConnectionUserName</name>
+        <value>root</value>
+    </property>
+    <!-- mysql 连接密码 -->
+    <property>
+        <name>javax.jdo.option.ConnectionPassword</name>
+        <value>123456</value>
+    </property>
+    <!-- mysql 连接URL 如果hive和mysql在同一服务器上，使用localhost -->
+    <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>jdbc:mysql://slave1:3306/hive?useSSL=false</value>
+    </property>
+    <!-- mysql 连接驱动 -->
+    <property>
+        <name>javax.jdo.option.ConnectionDriverName</name>
+        <value>com.mysql.jdbc.Driver</value>
+    </property>
+
+    <property>
+        <name>hive.exec.scratchdir</name>
+        <value>/opt/soft/hive/apache-hive-2.3.9-bin</value>
+    </property>
+    <property>
+        <name>hive.metastore.warehouse.dir</name>
+        <value>/hive/warehouse</value>
+    </property>
+    <property>
+        <name>hive.exec.local.scratchdir</name>
+        <value>/opt/soft/hive/tmp/${user.name}</value>
+    </property>
+    <property>
+        <name>hive.downloaded.resources.dir</name>
+        <value>/opt/soft/hive/tmp/${hive.session.id}_resources</value>
+    </property>
+    <property>
+        <name>hive.server2.logging.operation.log.location</name>
+        <value>/opt/soft/hive/tmp/root/operation_logs</value>
+    </property>
+</configuration>
